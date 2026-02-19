@@ -8,22 +8,17 @@ public class Producer implements Runnable {
     }
 
     public void run() {
-        String[] importantInfo = {
-                "Mares eat oats",
-                "Does eat oats",
-                "Little lambs eat ivy",
-                "A kid will eat ivy too"
-        };
         Random random = new Random();
 
-        for (int i = 0;
-             i < importantInfo.length;
-             i++) {
-            buffer.put(importantInfo[i]);
+        for (int i = 0; i < 1000; i++)
+        {
+            buffer.put(i);
+            System.out.println("Put num: " + i);
+
             try {
-                Thread.sleep(random.nextInt(5000));
+                Thread.sleep(random.nextInt(10));
             } catch (InterruptedException e) {}
         }
-        buffer.put("DONE");
+        buffer.put(-1);
     }
 }

@@ -8,13 +8,15 @@ public class Consumer implements Runnable {
     }
 
     public void run() {
+        int num = buffer.take();
         Random random = new Random();
-        for (String message = buffer.take();
-             ! message.equals("DONE");
-             message = buffer.take()) {
-            System.out.format("MESSAGE RECEIVED: %s%n", message);
+        while (num != -1)
+        {
+            System.out.println("Took num: " + num);
+            num = buffer.take();
+
             try {
-                Thread.sleep(random.nextInt(5000));
+                Thread.sleep(random.nextInt(10));
             } catch (InterruptedException e) {}
         }
     }

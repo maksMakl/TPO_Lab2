@@ -1,6 +1,6 @@
 class Bank
 {
-    public static final int NTEST = 10000;
+    public static final int NTEST = 100000;
     private final int[] accounts;
     private long ntransacts = 0;
 
@@ -22,6 +22,49 @@ class Bank
             test();
     }
 
+    public synchronized void transfer_syncMethod(int from, int to, int amount)
+    {
+        accounts[from] -= amount;
+        accounts[to] += amount;
+        ntransacts++;
+        if (ntransacts % NTEST == 0)
+            test();
+    }
+
+    public void transfer_syncBlock(int from, int to, int amount)
+    {
+        synchronized (this)
+        {
+            accounts[from] -= amount;
+            accounts[to] += amount;
+            ntransacts++;
+            if (ntransacts % NTEST == 0)
+                test();
+        }
+    }
+
+    public synchronized void transfer_wait(int from, int to, int amount)
+    {
+        while (accounts[from] < amount)
+        {
+            try
+            {
+                wait();
+            }
+            catch (InterruptedException e)
+            {
+                return;
+            }
+        }
+
+        accounts[from] -= amount;
+        accounts[to] += amount;
+        ntransacts++;
+        if (ntransacts % NTEST == 0)
+            test();
+        notifyAll();
+    }
+
     public void test()
     {
         int sum = 0;
@@ -29,6 +72,11 @@ class Bank
             sum += accounts[i] ;
         System.out.println("Transactions:" + ntransacts
                 + " Sum: " + sum);
+        for (int i = 0; i < accounts.length; i++)
+        {
+            System.out.printf("account N%d: %d\n", i, accounts[i]);
+        }
+        System.out.println('\n');
     }
 
     public int size()

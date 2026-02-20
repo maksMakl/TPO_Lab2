@@ -5,7 +5,7 @@ public class SymbolPrinterUnsafe implements Runnable
     private final static int ROW_SIZE = 10 * 3;
     private final static int N_ROWS = 90;
 
-    public SymbolPrinterUnsafe(char symbol, int order)
+    public SymbolPrinterUnsafe(char symbol)
     {
         this.symbol = symbol;
     }

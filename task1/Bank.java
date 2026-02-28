@@ -1,8 +1,12 @@
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 class Bank
 {
     public static final int NTEST = 100000;
     private final int[] accounts;
     private long ntransacts = 0;
+    private final Lock lock;
 
     public Bank(int n, int initialBalance)
     {
@@ -11,6 +15,7 @@ class Bank
         for (i = 0; i < accounts.length; i++)
             accounts[i] = initialBalance;
         ntransacts = 0;
+        lock = new ReentrantLock();
     }
 
     public void transfer(int from, int to, int amount)
@@ -31,15 +36,21 @@ class Bank
             test();
     }
 
-    public void transfer_syncBlock(int from, int to, int amount)
+    public void transfer_lock(int from, int to, int amount)
     {
-        synchronized (this)
+        try
         {
+            lock.lock();
+
             accounts[from] -= amount;
             accounts[to] += amount;
             ntransacts++;
             if (ntransacts % NTEST == 0)
                 test();
+        }
+        finally
+        {
+            lock.unlock();
         }
     }
 

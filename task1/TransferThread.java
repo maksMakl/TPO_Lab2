@@ -24,7 +24,7 @@ class TransferThread extends Thread
 
                 //bank.transfer(fromAccount, toAccount, amount);
                 //bank.transfer_syncMethod(fromAccount, toAccount, amount);
-                //bank.transfer_syncBlock(fromAccount, toAccount, amount);
+                //bank.transfer_lock(fromAccount, toAccount, amount);
                 bank.transfer_wait(fromAccount, toAccount, amount);
             }
         }
